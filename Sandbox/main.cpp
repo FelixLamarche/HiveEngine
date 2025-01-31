@@ -2,6 +2,7 @@
 #include <core/Application.h>
 #include <rendering/RenderType.h>
 
+#include <array>
 #include <iostream>
 #include <chrono>
 #include <glm/glm.hpp>
@@ -20,6 +21,8 @@
 #include <rendering/vulkan/vulkan_pipeline.h>
 #include <rendering/vulkan/vulkan_shader.h>
 #include <rendering/vulkan/vulkan_types.h>
+
+#include "rendering/EditorCamera.h"
 
 void RegisterDefaultLoggerSync(hive::Logger::LogLevel level)
 {
@@ -40,15 +43,19 @@ public:
 protected:
     bool on_init() override;
 
-    bool on_update(float delta_time) override;
+    bool on_update(f32 delta_time) override;
 
     bool on_destroy() override;
 
     void load_model();
+    void process_inputs(f32 delta_time);
+	void update_camera();
 
 private:
     std::vector<hive::Vertex> vertices;
     std::vector<u32> indices;
+
+    hive::EditorCamera editorCamera{};
 
     struct VikingRoom
     {
@@ -267,35 +274,44 @@ bool BasicApp::on_init()
         }
     }
 
+    // Camera setup
+    {
+        editorCamera.position = { 0.0f, 2.0f, 4.0f };
+        editorCamera.look_at({ 0.0f, 0.0f, 0.0f });
+		active_camera_ = &editorCamera;
+    }
+
     return true;
 }
 
 static auto startTime = std::chrono::high_resolution_clock::now();
-void update_camera(hive::vk::GraphicsDevice_Vulkan &device_vulkan, hive::vk::VulkanBuffer &buffer)
+void BasicApp::update_camera()
 {
     auto currentTime = std::chrono::high_resolution_clock::now();
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-    hive::UniformBufferObject ubo{};
-    ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    // ubo.model = glm::mat4(1.0f);
-    ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    ubo.proj = glm::perspective(glm::radians(45.0f),
-                                1920 / (float) 1080, 0.1f, 10.0f);
-    ubo.proj[1][1] *= -1;
 
-    memcpy(buffer.map, &ubo, sizeof(ubo));
+    hive::UniformBufferObject ubo{};
+    ubo.model = glm::mat4(1.0f);
+    ubo.model = glm::rotate(ubo.model, time * glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    ubo.model = glm::rotate(ubo.model, glm::radians(270.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Put model upright with y-axis up
+
+    ubo.view = active_camera_->get_view_matrix();
+	ubo.proj = active_camera_->get_projection_matrix(1080.0f / 920.0f); // TODO: get aspect ratio from window
+    // Vulkan uses a coordinate system with the y-axis going from [top, bottom] [0, 1] instead of [bottom, top] [0, 1]
+    ubo.proj[1][1] *= -1; 
+
+    memcpy(ubo_buffer.map, &ubo, sizeof(ubo));
 }
 
-bool BasicApp::on_update(float delta_time)
+bool BasicApp::on_update(f32 delta_time)
 {
+    process_inputs(delta_time);
+    update_camera();
 
-    update_camera(*device_vulkan_, ubo_buffer);
 
     if (!device_vulkan_->BeginCmd()) return false;
 
     {
-
-
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
@@ -372,6 +388,43 @@ void BasicApp::load_model()
             indices.push_back(indices.size());
         }
     }
+}
+
+void BasicApp::process_inputs(f32 delta_time)
+{
+    // Camera inputs
+	if (window_.isKeyPressed(hive::InputKey::W))
+	{
+		editorCamera.move_direction(hive::EditorCamera::Direction::FORWARD, delta_time);
+	}
+	if (window_.isKeyPressed(hive::InputKey::S))
+	{
+        editorCamera.move_direction(hive::EditorCamera::Direction::BACKWARD, delta_time);
+	}
+	if (window_.isKeyPressed(hive::InputKey::A))
+	{
+        editorCamera.move_direction(hive::EditorCamera::Direction::LEFT, delta_time);
+	}
+	if (window_.isKeyPressed(hive::InputKey::D))
+	{
+        editorCamera.move_direction(hive::EditorCamera::Direction::RIGHT, delta_time);
+	}
+	if (window_.isKeyPressed(hive::InputKey::E))
+	{
+        editorCamera.move_direction(hive::EditorCamera::Direction::UP, delta_time);
+	}
+	if (window_.isKeyPressed(hive::InputKey::Q))
+	{
+        editorCamera.move_direction(hive::EditorCamera::Direction::DOWN, delta_time);
+	}
+
+    const glm::vec2 mouse_delta = window_.getMouseOffset();
+    editorCamera.mouse_rotation(mouse_delta.x, mouse_delta.y);
+
+	if (window_.isKeyPressed(hive::InputKey::ESC))
+	{
+        window_.unlockCursor();
+	}
 }
 
 int main()

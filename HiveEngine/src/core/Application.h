@@ -4,6 +4,7 @@
 #include "core/Memory.h"
 #include "core/Logger.h"
 #include "core/Window.h"
+#include "rendering/Camera.h"
 
 namespace hive::vk
 {
@@ -27,6 +28,7 @@ namespace hive
 
         virtual ~Application();
         void run();
+		void setActiveCamera(Camera* camera) { active_camera_ = camera; }
 
     protected:
         virtual bool on_init() = 0;
@@ -35,6 +37,7 @@ namespace hive
 
         Memory memory_;
         Window window_;
+        Camera* active_camera_;
         // GraphicsDevice *device_ = nullptr;
         vk::GraphicsDevice_Vulkan *device_vulkan_;
 

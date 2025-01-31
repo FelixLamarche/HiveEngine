@@ -4,7 +4,7 @@
 #include <chrono>
 #include <stdexcept>
 
-hive::Application::Application(const ApplicationConfig &config) : memory_(), window_(config.window_config), device_vulkan_(nullptr)
+hive::Application::Application(const ApplicationConfig &config) : memory_(), window_(config.window_config), active_camera_(nullptr), device_vulkan_(nullptr)
 {
 
     device_vulkan_ = Memory::createObject<vk::GraphicsDevice_Vulkan, Memory::RENDERER>(window_);
@@ -21,10 +21,18 @@ void hive::Application::run()
 {
     on_init();
 
+	// TODO implement a better way to handle time
+    const auto startTime = std::chrono::high_resolution_clock::now();
+    auto prevTime = startTime;
+    f32 deltaTime = 0.0f;
     while (!app_should_close_ && !window_.shouldClose())
     {
+		const auto currentTime = std::chrono::high_resolution_clock::now();
+		deltaTime = std::chrono::duration<f32, std::chrono::seconds::period>(currentTime - prevTime).count();
+		prevTime = currentTime;
+
         window_.pollEvents();
-        on_update(0);
+        on_update(deltaTime);
     }
 
     on_destroy();

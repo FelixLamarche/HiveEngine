@@ -57,6 +57,26 @@ void hive::Window::getFramebufferSize(i32 &width, i32 &height) const
    window_handle->getFramebufferSize(width, height);
 }
 
+bool hive::Window::isKeyPressed(InputKey input) const
+{
+    return window_handle->isKeyPressed(input);
+}
+
+glm::vec2 hive::Window::getMousePosition() const
+{
+    return window_handle->getMousePosition();
+}
+
+glm::vec2 hive::Window::getMouseOffset() const
+{
+    return window_handle->getMouseOffset();
+}
+
+void hive::Window::unlockCursor()
+{
+	window_handle->unlockCursor();
+}
+
 #ifdef HIVE_BACKEND_VULKAN_SUPPORTED
 #include <vulkan/vulkan.h>
 void hive::Window::appendRequiredVulkanExtension(std::vector<const char *> &vector) const
