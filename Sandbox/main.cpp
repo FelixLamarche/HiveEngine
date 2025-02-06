@@ -392,36 +392,40 @@ void BasicApp::load_model()
 
 void BasicApp::process_inputs(f32 delta_time)
 {
+	static glm::vec2 prev_mouse_pos = input_.getMousePosition();
     // Camera inputs
-	if (window_.isKeyPressed(hive::InputKey::W))
+	if (input_.isKeyPressed(hive::InputKey::W))
 	{
 		editorCamera.move_direction(hive::EditorCamera::Direction::FORWARD, delta_time);
 	}
-	if (window_.isKeyPressed(hive::InputKey::S))
+	if (input_.isKeyPressed(hive::InputKey::S))
 	{
         editorCamera.move_direction(hive::EditorCamera::Direction::BACKWARD, delta_time);
 	}
-	if (window_.isKeyPressed(hive::InputKey::A))
+	if (input_.isKeyPressed(hive::InputKey::A))
 	{
         editorCamera.move_direction(hive::EditorCamera::Direction::LEFT, delta_time);
 	}
-	if (window_.isKeyPressed(hive::InputKey::D))
+	if (input_.isKeyPressed(hive::InputKey::D))
 	{
         editorCamera.move_direction(hive::EditorCamera::Direction::RIGHT, delta_time);
 	}
-	if (window_.isKeyPressed(hive::InputKey::E))
+	if (input_.isKeyPressed(hive::InputKey::E))
 	{
         editorCamera.move_direction(hive::EditorCamera::Direction::UP, delta_time);
 	}
-	if (window_.isKeyPressed(hive::InputKey::Q))
+	if (input_.isKeyPressed(hive::InputKey::Q))
 	{
         editorCamera.move_direction(hive::EditorCamera::Direction::DOWN, delta_time);
 	}
 
-    const glm::vec2 mouse_delta = window_.getMouseOffset();
+    const glm::vec2 mouse_pos = input_.getMousePosition();
+    const glm::vec2 mouse_delta = mouse_pos - prev_mouse_pos;
+	prev_mouse_pos = mouse_pos;
+
     editorCamera.mouse_rotation(mouse_delta.x, mouse_delta.y);
 
-	if (window_.isKeyPressed(hive::InputKey::ESC))
+	if (input_.isKeyPressed(hive::InputKey::Escape))
 	{
         window_.unlockCursor();
 	}

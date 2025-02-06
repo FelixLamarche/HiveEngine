@@ -4,10 +4,11 @@
 #include <chrono>
 #include <stdexcept>
 
-hive::Application::Application(const ApplicationConfig &config) : memory_(), window_(config.window_config), active_camera_(nullptr), device_vulkan_(nullptr)
+hive::Application::Application(const ApplicationConfig &config) : input_(), memory_(), window_(config.window_config), active_camera_(nullptr), device_vulkan_(nullptr)
 {
-
     device_vulkan_ = Memory::createObject<vk::GraphicsDevice_Vulkan, Memory::RENDERER>(window_);
+
+	input_.subscribeToWindowEvents(window_);
 }
 
 hive::Application::~Application()
@@ -31,6 +32,7 @@ void hive::Application::run()
 		deltaTime = std::chrono::duration<f32, std::chrono::seconds::period>(currentTime - prevTime).count();
 		prevTime = currentTime;
 
+		input_.on_update(deltaTime);
         window_.pollEvents();
         on_update(deltaTime);
     }
