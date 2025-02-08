@@ -4,10 +4,11 @@
 #include <chrono>
 #include <stdexcept>
 
-hive::Application::Application(const ApplicationConfig &config) : memory_(), window_(config.window_config), device_vulkan_(nullptr)
+hive::Application::Application(const ApplicationConfig &config) : input_(), memory_(), window_(config.window_config), device_vulkan_(nullptr)
 {
-
     device_vulkan_ = Memory::createObject<vk::GraphicsDevice_Vulkan, Memory::RENDERER>(window_);
+
+	input_.subscribeToWindowEvents(window_);
 }
 
 hive::Application::~Application()
@@ -23,6 +24,7 @@ void hive::Application::run()
 
     while (!app_should_close_ && !window_.shouldClose())
     {
+		input_.on_update(0.0f);
         window_.pollEvents();
         on_update(0);
     }

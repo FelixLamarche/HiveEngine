@@ -57,6 +57,31 @@ void hive::Window::getFramebufferSize(i32 &width, i32 &height) const
    window_handle->getFramebufferSize(width, height);
 }
 
+void hive::Window::unlockCursor()
+{
+	window_handle->unlockCursor();
+}
+
+void hive::Window::subscribeToKeyInputs(std::function<void(InputKey, InputState)> callback)
+{
+	window_handle->subscribeToKeyInputs(callback);
+}
+
+void hive::Window::subscribeToMouseInputs(std::function<void(f32, f32)> callback)
+{
+	window_handle->subscribeToMouseInputs(callback);
+}
+
+void hive::Window::subscribeToMouseKeyInputs(std::function<void(MouseButton, InputState)> callback)
+{
+	window_handle->subscribeToMouseKeyInputs(callback);
+}
+
+void hive::Window::subscribeToMouseScrollInputs(std::function<void(f32, f32)> callback)
+{
+	window_handle->subscribeToMouseScrollInputs(callback);
+}
+
 #ifdef HIVE_BACKEND_VULKAN_SUPPORTED
 #include <vulkan/vulkan.h>
 void hive::Window::appendRequiredVulkanExtension(std::vector<const char *> &vector) const
@@ -68,6 +93,4 @@ void hive::Window::createVulkanSurface(void* instance, void* surface_khr) const
 {
     window_handle->createVulkanSurface(instance, surface_khr);
 }
-
-
 #endif

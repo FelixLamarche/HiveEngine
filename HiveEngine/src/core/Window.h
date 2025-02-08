@@ -1,7 +1,10 @@
 #pragma once
 #include <hvpch.h>
 #include <vector>
+#include <functional>
+#include <glm/glm.hpp>
 
+#include "core/Input.h"
 #include <rendering/RendererPlatform.h>
 
 namespace hive
@@ -28,6 +31,11 @@ namespace hive
         virtual void pollEvents() = 0;
         virtual void waitEvents() const = 0;
         virtual void getFramebufferSize(i32& width, i32 &height) const = 0;
+		virtual void unlockCursor() = 0;
+        virtual void subscribeToKeyInputs(std::function<void(InputKey, InputState)> callback) = 0;
+        virtual void subscribeToMouseInputs(std::function<void(f32, f32)> callback) = 0;
+        virtual void subscribeToMouseKeyInputs(std::function<void(MouseButton, InputState)> callback) = 0;
+		virtual void subscribeToMouseScrollInputs(std::function<void(f32, f32)> callback) = 0;
 
 
 #ifdef HIVE_BACKEND_VULKAN_SUPPORTED
@@ -48,6 +56,11 @@ namespace hive
         void waitEvents() const ;
 
         void getFramebufferSize(i32& width, i32 &height) const;
+        void unlockCursor();
+        void subscribeToKeyInputs(std::function<void(InputKey, InputState)> callback);
+		void subscribeToMouseInputs(std::function<void(f32, f32)> callback);
+		void subscribeToMouseKeyInputs(std::function<void(MouseButton, InputState)> callback);
+        void subscribeToMouseScrollInputs(std::function<void(f32, f32)> callback);
 
 #ifdef HIVE_BACKEND_VULKAN_SUPPORTED
         void appendRequiredVulkanExtension(std::vector<const char*> &vector) const;

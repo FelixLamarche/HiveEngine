@@ -1,6 +1,7 @@
 #pragma once
 #include <optional>
 
+#include "core/Input.h"
 #include "core/Memory.h"
 #include "core/Logger.h"
 #include "core/Window.h"
@@ -33,6 +34,7 @@ namespace hive
         virtual bool on_update(float delta_time) = 0;
         virtual bool on_destroy() = 0;
 
+		Input input_;
         Memory memory_;
         Window window_;
         // GraphicsDevice *device_ = nullptr;

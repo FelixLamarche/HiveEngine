@@ -45,6 +45,7 @@ protected:
     bool on_destroy() override;
 
     void load_model();
+    void process_inputs(f32 deltaTime);
 
 private:
     std::vector<hive::Vertex> vertices;
@@ -288,7 +289,7 @@ void update_camera(hive::vk::GraphicsDevice_Vulkan &device_vulkan, hive::vk::Vul
 
 bool BasicApp::on_update(float delta_time)
 {
-
+    process_inputs(delta_time);
     update_camera(*device_vulkan_, ubo_buffer);
 
     if (!device_vulkan_->BeginCmd()) return false;
@@ -372,6 +373,14 @@ void BasicApp::load_model()
             indices.push_back(indices.size());
         }
     }
+}
+
+void BasicApp::process_inputs(f32 delta_time)
+{
+	if (input_.isKeyPressed(hive::InputKey::Escape))
+	{
+        window_.unlockCursor();
+	}
 }
 
 int main()
