@@ -1,5 +1,9 @@
-#include <iostream>
+#include "hive.h"
 int main()
 {
-    std::cout << "Hello World" << std::endl;
+    hive::Init();
+
+    HIVE_LOG_INFO("Hello World");
+
+    hive::Shutdown();
 }

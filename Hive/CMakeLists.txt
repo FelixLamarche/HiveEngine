@@ -1,0 +1,52 @@
+option(HIVE_TRACK_PROFILE "Set the tracking profile (FULL, DEBUG, RELEASE)" "DEBUG")
+
+add_library(HiveCore SHARED
+        Core/Event/EventManager.cpp
+        Core/Libraries/LibraryManager.cpp
+        Core/Logging/LogManager.cpp
+        Core/Logging/ConsoleLogger.cpp
+        Core/Memory/MemoryAllocator.cpp
+        Core/Memory/MemoryTracker.cpp
+        Core/Object/Object.cpp
+        Core/Platform/Platform_Linux.cpp
+        Core/Platform/Platform_Windows.cpp
+
+        Graphic/Buffer.cpp
+        Graphic/Command.cpp
+        Graphic/Framebuffer.cpp
+        Graphic/GraphicAPI.cpp
+        Graphic/RenderPass.cpp
+        Graphic/Shader.cpp
+        Graphic/Swapchain.cpp
+        Graphic/Texture.cpp
+
+        Display/DisplayAPI.cpp
+
+        hive.cpp
+
+)
+target_precompile_headers(HiveCore PUBLIC hvpch.h)
+target_compile_definitions(HiveCore PRIVATE HIVE_EXPORTS)
+target_compile_definitions(HiveCore PUBLIC HIVE_IMPORTS)
+
+target_include_directories(HiveCore PUBLIC ${PROJECT_SOURCE_DIR}/Hive)
+
+# Define the option with a default value
+
+# Set the corresponding compile definition based on the option
+if(HIVE_TRACK_PROFILE STREQUAL "FULL")
+    target_compile_definitions(HiveCore PUBLIC HIVE_TRACK_PROFILE_FULL)
+elseif(HIVE_TRACK_PROFILE STREQUAL "DEBUG")
+    target_compile_definitions(HiveCore PUBLIC HIVE_TRACK_PROFILE_DEBUG)
+elseif(HIVE_TRACK_PROFILE STREQUAL "RELEASE")
+    target_compile_definitions(HiveCore PUBLIC HIVE_TRACK_PROFILE_RELEASE)
+else()
+    message(FATAL_ERROR "Invalid value for HIVE_TRACK_PROFILE. Valid options are FULL, DEBUG, or RELEASE.")
+endif()
+
+
+
+
+if(NOT MSVC)
+    target_compile_options(HiveCore PRIVATE -fvisibility=hidden -fvisibility-inlines-hidden)
+endif ()

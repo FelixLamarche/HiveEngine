@@ -11,4 +11,5 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
+add_subdirectory(Hive)
 add_subdirectory(Testbed)
