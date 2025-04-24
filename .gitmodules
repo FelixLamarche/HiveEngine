@@ -1,0 +1,6 @@
+[submodule "Modules/Vulkan/3rdparty/vk-bootstrap"]
+	path = Modules/Vulkan/3rdparty/vk-bootstrap
+	url = https://github.com/charles-lunarg/vk-bootstrap.git
+[submodule "Modules/GLFW/3rdparty/glfw"]
+	path = Modules/GLFW/3rdparty/glfw
+	url = https://github.com/glfw/glfw.git

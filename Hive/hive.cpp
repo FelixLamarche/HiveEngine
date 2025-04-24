@@ -1,7 +1,7 @@
 #include "Core/Logging/ConsoleLogger.h"
 #include "Core/Logging/LogManager.h"
 #include "Display/DisplayAPI.h"
-#include "Graphic/GraphicAPI.h"
+#include "Graphic/GFX.h"
 #include "hive.h"
 
 
@@ -25,11 +25,20 @@ bool hive::Init()
 
     //TODO Load library from config file
 
-    // g_hive.lib_manager.LoadLibrary("Glfw");
-    // hive::DisplaySetBackend("glfw");
+    auto glfw_lib = g_hive.lib_manager.LoadLibrary("Glfw");
+    if(glfw_lib == -1)
+    {
+        return false;
+    }
+    hive::DisplaySetBackend("glfw");
 
-    // g_hive.lib_manager.LoadLibrary("Vulkan");
-    // hive::gfx::SetBackend("vulkan");
+    auto vulkan_lib = g_hive.lib_manager.LoadLibrary("Vulkan");
+    if(vulkan_lib == -1)
+    {
+        return false;
+    }
+
+    hive::gfx::set_backend_api("vulkan");
 
     return true;
 }

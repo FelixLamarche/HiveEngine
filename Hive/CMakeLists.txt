@@ -11,14 +11,7 @@ add_library(HiveCore SHARED
         Core/Platform/Platform_Linux.cpp
         Core/Platform/Platform_Windows.cpp
 
-        Graphic/Buffer.cpp
-        Graphic/Command.cpp
-        Graphic/Framebuffer.cpp
-        Graphic/GraphicAPI.cpp
-        Graphic/RenderPass.cpp
-        Graphic/Shader.cpp
-        Graphic/Swapchain.cpp
-        Graphic/Texture.cpp
+        Graphic/GFX.cpp
 
         Display/DisplayAPI.cpp
 

@@ -13,3 +13,5 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(Hive)
 add_subdirectory(Testbed)
+add_subdirectory(Modules/Vulkan)
+add_subdirectory(Modules/GLFW)
