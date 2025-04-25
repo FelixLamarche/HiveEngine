@@ -9,7 +9,7 @@ hive::gfx::FramebufferHandle * hive::vk::vulkan_framebuffer_create(const gfx::De
 {
     std::vector<VkFramebuffer> framebuffers(desc.swapchain->swapchain.image_count);
 
-    for (int i = 0; i < gfx::SwapchainHandle::SWAP_IMAGE_VIEW_SIZE; i++)
+    for (int i = 0; i < desc.swapchain->swapchain.image_count; i++)
     {
         std::vector<VkImageView> attachments;
         attachments.push_back(desc.swapchain->image_views[i]);

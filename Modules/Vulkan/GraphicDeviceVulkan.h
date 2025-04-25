@@ -1,8 +1,6 @@
 #pragma once
 #include <Graphic/GFX.h>
-
 #include "VkBootstrap.h"
-#include "vulkan/vulkan.h"
 namespace hive::gfx
 {
     struct DeviceHandle
@@ -16,20 +14,8 @@ namespace hive::gfx
 
 namespace hive::vk
 {
-    struct VulkanTexture
-    {
-        VkImage m_image;
-        VkImageView m_view;
-        VkImageCreateInfo m_create_info;
-        VkImageViewCreateInfo m_view_info;
-    };
-}
-
-namespace hive::vk
-{
     gfx::DeviceHandle* vulkan_device_create(const gfx::DeviceDesc &desc);
     void vulkan_device_destroy(gfx::DeviceHandle *device);
-
     void vulkan_device_wait_idle(const gfx::DeviceHandle *device);
 }
 

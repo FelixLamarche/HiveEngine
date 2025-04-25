@@ -1,7 +1,6 @@
 #include "Core/Platform/Platform.h"
 #include "Display/DisplayAPI.h"
 #include "SurfaceFactory.h"
-
 #include <vulkan/vulkan.h>
 
 
@@ -43,10 +42,11 @@ void hive::vk::CreateSurface(Display* display, VkInstance instance, VkSurfaceKHR
 
 #ifdef HIVE_PLATFORM_WINDOWS
 #include "Display/DisplayAPI.h"
+#include "SurfaceFactory.h"
 #include "windows.h"
 #include "vulkan/vulkan_win32.h"
 
-void hive::vk::CreateSurface(Display *display, VkInstance instance, VkSurfaceKHR*surface)
+void hive::vk::vulkan_create_surface(Display *display, VkInstance instance, VkSurfaceKHR*surface)
 {
     VkWin32SurfaceCreateInfoKHR create_info{};
     create_info.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
@@ -61,3 +61,5 @@ void hive::vk::CreateSurface(Display *display, VkInstance instance, VkSurfaceKHR
         HIVE_LOG_ERROR("Failed to create window surface!");
 }
 #endif
+
+

@@ -287,7 +287,7 @@ namespace hive::gfx
 
     struct GFX_API
     {
-        std::string name;
+        const char* name;
 
         DEVICE_API(DEFINE_FN_PTR);
         SWAPCHAIN_API(DEFINE_FN_PTR);

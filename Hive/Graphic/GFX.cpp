@@ -18,7 +18,7 @@ namespace hive::gfx
     {
         for(auto api : g_gfx_apis)
         {
-            if(api->name == backend)
+            if(std::string(api->name) == backend)
             {
                 g_current_api = api;
                 set_api_fn_ptr(g_current_api);

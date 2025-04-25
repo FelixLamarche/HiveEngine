@@ -1,6 +1,5 @@
-#include "GraphicDeviceVulkan.h"
-
 #include "SurfaceFactory.h"
+#include "GraphicDeviceVulkan.h"
 
 
 //TODO error handling. Need to free the allocated resources if something fail
@@ -30,7 +29,7 @@ hive::gfx::DeviceHandle* hive::vk::vulkan_device_create(const gfx::DeviceDesc& c
     device->m_vkb_instance = instance_ret.value();
 
     VkSurfaceKHR surface = VK_NULL_HANDLE;
-    CreateSurface(create_info.display, device->m_vkb_instance, &surface);
+    hive::vk::vulkan_create_surface(create_info.display, device->m_vkb_instance, &surface);
     if (surface == VK_NULL_HANDLE)
     {
         HIVE_LOG_ERROR("Failed to create vulkan surface");
