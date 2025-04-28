@@ -10,10 +10,12 @@ add_library(HiveCore SHARED
         Core/Object/Object.cpp
         Core/Platform/Platform_Linux.cpp
         Core/Platform/Platform_Windows.cpp
+        Core/Profiling/Profiler.cpp
 
         Graphic/GFX.cpp
 
         Display/DisplayAPI.cpp
+
 
         hive.cpp
 
@@ -28,10 +30,13 @@ target_include_directories(HiveCore PUBLIC ${PROJECT_SOURCE_DIR}/Hive)
 
 # Set the corresponding compile definition based on the option
 if(HIVE_TRACK_PROFILE STREQUAL "FULL")
+    # Profiling enabled, Memory allocation tracking,
     target_compile_definitions(HiveCore PUBLIC HIVE_TRACK_PROFILE_FULL)
 elseif(HIVE_TRACK_PROFILE STREQUAL "DEBUG")
+    # Memory allocation tracking only
     target_compile_definitions(HiveCore PUBLIC HIVE_TRACK_PROFILE_DEBUG)
 elseif(HIVE_TRACK_PROFILE STREQUAL "RELEASE")
+    # No tracking at all
     target_compile_definitions(HiveCore PUBLIC HIVE_TRACK_PROFILE_RELEASE)
 else()
     message(FATAL_ERROR "Invalid value for HIVE_TRACK_PROFILE. Valid options are FULL, DEBUG, or RELEASE.")
@@ -43,3 +48,4 @@ endif()
 if(NOT MSVC)
     target_compile_options(HiveCore PRIVATE -fvisibility=hidden -fvisibility-inlines-hidden)
 endif ()
+

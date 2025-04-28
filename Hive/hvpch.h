@@ -36,6 +36,15 @@ using float64 = double;
 #define HIVE_API API_IMPORT
 #endif
 
+#if defined(HIVE_TRACK_PROFILE_FULL)
+#define HIVE_MEMORY_ENABLED
+#define HIVE_PROFILER_ENABLED
+#elif defined(HIVE_TRACK_PROFILE_DEBUG)
+#define HIVE_MEMORY_ENABLED
+#else
+#endif
+
 #include "Core/Logging/LogManager.h"
 #include "Core/Memory/MemoryAllocator.h"
 #include "Core/Debug.h"
+

@@ -1,11 +1,12 @@
+#ifdef HIVE_MEMORY_ENABLED
+#include <Core/Profiling/Profiler.h>
+
 #include "MemoryAllocator.h"
 #include "MemoryTracker.h"
 
 #include <cstdlib>
 #include <cstring>
 #include <hive_internal.h>
-
-#ifdef HIVE_TRACK_PROFILE_FULL
 
 struct AllocationData
 {
@@ -34,6 +35,10 @@ void* hive_allocate(size_t size, AllocationCategory category, const char* file, 
 
     hive::g_hive.tracker.Track(actual_ptr);
 
+#ifdef HIVE_PROFILER_ENABLED
+    hive::profile_memory_alloc(actual_ptr, "heap", size + sizeof(AllocationData));
+#endif
+
     return ptr;
 }
 
@@ -43,9 +48,13 @@ void hive_free(void* ptr)
     AllocationData *data = reinterpret_cast<AllocationData*>(actual_ptr);
     hive::g_hive.tracker.Untrack(actual_ptr);
 
-
     std::memset(actual_ptr, 0, data->size + sizeof(AllocationData));
     std::free(actual_ptr);
+
+#ifdef HIVE_PROFILER_ENABLED
+    hive::profile_memory_free(actual_ptr);
+#endif
+
 }
 
 

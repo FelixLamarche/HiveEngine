@@ -14,6 +14,8 @@ namespace hive
         void Shutdown();
 
         LibraryID LoadLibrary(const char* library_name);
+        static void* LoadLibraryUnmanaged(const char* library_name);
+        static void UnloadLibraryUnmanaged(void* library);
         void UnloadLibrary(LibraryID id);
 
     private:

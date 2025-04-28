@@ -15,6 +15,8 @@
 
 
 #define TINYOBJLOADER_IMPLEMENTATION
+#include <Core/Profiling/Profiler.h>
+
 #include "tiny_obj_loader.h"
 
 
@@ -81,9 +83,11 @@ int main()
 
     hive::EventManager event_manager;
 
+    ProfileCZoneName(ctx, "init");
     InitDisplay(event_manager);
     InitGraphic();
     InitScene();
+    ProfileCZoneEnd(ctx);
 
     bool application_run = true;
 
@@ -97,6 +101,7 @@ int main()
     static auto startTime = std::chrono::high_resolution_clock::now();
     while(application_run)
     {
+        ProfileCZoneName(ctx, "render");
         hive::DisplayPollEvent();
         event_manager.EventFlush();
 
@@ -115,6 +120,7 @@ int main()
         hive::gfx::buffer_update(testbed.device, testbed.command_pool, scene.ubo_buffer[0], &ubo, sizeof(ubo));
         hive::gfx::tmp_draw(current_frame, testbed.device, testbed.in_flight_fences[current_frame], testbed.image_available_semaphore[current_frame], testbed.render_finished_semaphore[current_frame], testbed.swapchain, testbed.command_buffer, testbed.framebuffer, testbed.render_pass, testbed.shader_program,scene.vertex_buffer, scene.index_buffer, testbed.binding_group, scene.indices_count);
         current_frame = (current_frame + 1) % MAX_FRAME_IN_FLIGHT;
+        ProfileCZoneEnd(ctx);
 
     }
 
@@ -128,12 +134,14 @@ int main()
 
 void InitDisplay(hive::EventManager &event_manager)
 {
-    hive::DisplayCreateInfo create_info(event_manager, 1080, 920, "Testbed");
+    ProfileScoped();
+    hive::DisplayCreateInfo create_info(event_manager, 1200, 1080, "Testbed");
     testbed.display = hive::display_create(create_info);
 }
 
 void InitGraphic()
 {
+    ProfileScoped()
     hive::gfx::DeviceDesc device_desc{};
     device_desc.display = testbed.display;
 
@@ -141,7 +149,9 @@ void InitGraphic()
 
     //Swapchain
     hive::gfx::SwapchainDesc swap_desc{};
-    testbed.swapchain = hive::gfx::swapchain_create(testbed.device, swap_desc);
+    auto tmp_swap = hive::gfx::swapchain_create(testbed.device, swap_desc);
+    testbed.swapchain = hive::gfx::swapchain_resize(testbed.device, tmp_swap, 1200, 1080);
+
 
     //Renderpass
     hive::gfx::RenderpassDesc render_pass_desc{};
@@ -151,8 +161,8 @@ void InitGraphic()
     //Framebuffer
     hive::gfx::TextureDesc depth_texture_desc{};
     //TODO get this data from display API instead
-    depth_texture_desc.width = 1080;
-    depth_texture_desc.height = 920;
+    depth_texture_desc.width = 1200;
+    depth_texture_desc.height = 1080;
 
     depth_texture_desc.format = hive::gfx::TEXTURE_FORMAT_D32_SFLOAT;
     depth_texture_desc.usage_flags = hive::gfx::TEXTURE_USAGE_DEPTH;
@@ -233,6 +243,7 @@ void InitGraphic()
 
 void InitScene()
 {
+    ProfileScoped();
     //Texture
     int width, height, channels;
     auto pixels = stbi_load("../../Testbed/viking_room.png", &width, &height, &channels, STBI_rgb_alpha);

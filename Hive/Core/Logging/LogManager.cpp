@@ -35,7 +35,7 @@ void hive::LogManager::RemoveCallback(const LoggerID id)
 {
     if (p_callbacks.contains(id))
     {
-        HV_FREE_OOP p_callbacks[id];
+        // HV_FREE_OOP p_callbacks[id];
         p_callbacks.erase(id);
     }
 }

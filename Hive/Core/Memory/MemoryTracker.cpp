@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <hive_internal.h>
 #include <iostream>
+#include <Core/Profiling/Profiler.h>
 
 
 void hive::MemoryTracker::Init()

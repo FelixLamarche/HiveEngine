@@ -48,6 +48,7 @@ hive::gfx::SwapchainHandle* hive::vk::vulkan_swapchain_resize(const hive::gfx::D
 
     auto swap_ret = builder
             .set_old_swapchain(prev_swapchain->swapchain)
+            .set_desired_extent(width, height)
             .build();
 
     if (!swap_ret)
@@ -60,6 +61,12 @@ hive::gfx::SwapchainHandle* hive::vk::vulkan_swapchain_resize(const hive::gfx::D
 
     auto swapchain = static_cast<gfx::SwapchainHandle*>(HV_NEW(sizeof(gfx::SwapchainHandle), HIVE_ALLOC_CAT_ENGINE));
     swapchain->swapchain = swap_ret.value();
+
+    auto image_views = swapchain->swapchain.get_image_views().value();
+    for (uint8 i = 0; i < image_views.size(); i++)
+    {
+        swapchain->image_views[i] = image_views[i];
+    }
     return swapchain;
 
 }

@@ -11,6 +11,10 @@ namespace hive
         MemoryTracker tracker;
         LogManager logManager;
         LibraryManager lib_manager;
+
+#ifdef HIVE_PROFILER_ENABLED
+        void* profiler_lib = nullptr;
+#endif
     };
 
     extern HiveLibrary g_hive;

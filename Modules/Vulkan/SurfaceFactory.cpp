@@ -1,6 +1,6 @@
 #include "Core/Platform/Platform.h"
-#include "Display/DisplayAPI.h"
 #include "SurfaceFactory.h"
+#include "Display/DisplayAPI.h"
 #include <vulkan/vulkan.h>
 
 
@@ -9,7 +9,7 @@
 #include <vulkan/vulkan_xlib.h>
 #include <vulkan/vulkan_wayland.h>
 
-void hive::vk::CreateSurface(Display* display, VkInstance instance, VkSurfaceKHR *surface)
+void hive::vk::vulkan_create_surface(Display* display, VkInstance instance, VkSurfaceKHR *surface)
 {
     const auto session_type = std::string(std::getenv("XDG_SESSION_TYPE"));
 

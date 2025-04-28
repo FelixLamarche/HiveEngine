@@ -4,3 +4,6 @@
 [submodule "Modules/GLFW/3rdparty/glfw"]
 	path = Modules/GLFW/3rdparty/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "Modules/Tracy/3rdparty/tracy"]
+	path = Modules/Tracy/3rdparty/tracy
+	url = https://github.com/wolfpld/tracy.git
