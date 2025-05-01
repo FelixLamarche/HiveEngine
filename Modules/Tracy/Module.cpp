@@ -2,6 +2,8 @@
 
 #include "tracy/TracyC.h"
 #include <client/TracyProfiler.hpp>
+
+
 void tracy_init()
 {
     ___tracy_startup_profiler();
