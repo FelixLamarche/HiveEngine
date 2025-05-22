@@ -7,7 +7,17 @@ namespace hive
     HIVE_API ProfileCtx (*PFN_profile_zone_begin)(const ProfileLocationData* data) = nullptr;
     HIVE_API void (*PFN_profile_zone_end)(ProfileCtx ctx) = nullptr;
     HIVE_API void (*PFN_profile_memory_alloc)(const void* ptr, const char* pool_name, uint32 size) = nullptr;
-    HIVE_API void (*PFN_profile_memory_free)(const void* ptr) = nullptr;
+    HIVE_API void (*PFN_profile_memory_free)(const void* ptr, const char* pool_name) = nullptr;
+
+    void profile_set_api(const ProfilerAPI *api)
+    {
+        PFN_profile_init = api->PFN_profile_init;
+        PFN_profile_shutdown = api->PFN_profile_shutdown;
+        PFN_profile_zone_begin = api->PFN_profile_zone_begin;
+        PFN_profile_zone_end = api->PFN_profile_zone_end;
+        PFN_profile_memory_alloc = api->PFN_profile_memory_alloc;
+        PFN_profile_memory_free = api->PFN_profile_memory_free;
+    }
 
     void profile_init()
     {
@@ -41,11 +51,12 @@ namespace hive
         PFN_profile_memory_alloc(ptr, pool_name, size);
     }
 
-
-    void profile_memory_free(const void* ptr)
+    void profile_memory_free(const void *ptr, const char *pool_name)
     {
         HIVE_ASSERT(PFN_profile_memory_free != nullptr, "");
-        PFN_profile_memory_free(ptr);
+        PFN_profile_memory_free(ptr, pool_name);
     }
+
+
 }
 

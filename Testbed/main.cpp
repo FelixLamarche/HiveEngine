@@ -30,6 +30,7 @@ struct UniformBufferObject
     alignas(16) glm::mat4 proj;
 };
 
+
 struct Testbed
 {
     hive::Display *display = nullptr;
@@ -83,11 +84,14 @@ int main()
 
     hive::EventManager event_manager;
 
-    ProfileCZoneName(ctx, "init");
-    InitDisplay(event_manager);
-    InitGraphic();
-    InitScene();
-    ProfileCZoneEnd(ctx);
+    {
+        ProfileCZoneName(ctx, "init");
+        InitDisplay(event_manager);
+        InitGraphic();
+        InitScene();
+        ProfileCZoneEnd(ctx);
+
+    }
 
     bool application_run = true;
 
@@ -124,10 +128,15 @@ int main()
 
     }
 
-    hive::gfx::device_wait_idle(testbed.device);
-    ShutdownScene();
-    ShutdownGraphic();
-    ShutdownDisplay();
+    {
+        ProfileCZoneName(ctx, "shutdown")
+        hive::gfx::device_wait_idle(testbed.device);
+        ShutdownScene();
+        ShutdownGraphic();
+        ShutdownDisplay();
+        ProfileCZoneEnd(ctx);
+
+    }
 
     hive::Shutdown();
 }
@@ -149,8 +158,8 @@ void InitGraphic()
 
     //Swapchain
     hive::gfx::SwapchainDesc swap_desc{};
-    auto tmp_swap = hive::gfx::swapchain_create(testbed.device, swap_desc);
-    testbed.swapchain = hive::gfx::swapchain_resize(testbed.device, tmp_swap, 1200, 1080);
+    testbed.swapchain = hive::gfx::swapchain_create(testbed.device, swap_desc);
+    // testbed.swapchain = hive::gfx::swapchain_resize(testbed.device, tmp_swap, 1200, 1080);
 
 
     //Renderpass

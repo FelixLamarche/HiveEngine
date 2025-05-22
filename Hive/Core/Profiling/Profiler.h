@@ -19,6 +19,23 @@ namespace hive
     };
 
 
+
+    struct ProfilerAPI
+    {
+        void (*PFN_profile_init)();
+
+        void (*PFN_profile_shutdown)();
+
+        ProfileCtx (*PFN_profile_zone_begin)(const ProfileLocationData *data);
+
+        void (*PFN_profile_zone_end)(ProfileCtx ctx);
+
+        void (*PFN_profile_memory_alloc)(const void *ptr, const char *pool_name, uint32 size);
+
+        void (*PFN_profile_memory_free)(const void *ptr, const char *pool_name);
+    };
+
+    HIVE_API void profile_set_api(const ProfilerAPI *api);
     HIVE_API void profile_init();
     HIVE_API void profile_shutdown();
 
@@ -26,16 +43,7 @@ namespace hive
     HIVE_API void profile_zone_end(const ProfileCtx &ctx);
 
     HIVE_API void profile_memory_alloc(const void* ptr, const char* pool_name, uint32 size);
-    HIVE_API void profile_memory_free(const void* ptr);
-
-
-
-    HIVE_API extern void (*PFN_profile_init)();
-    HIVE_API extern void (*PFN_profile_shutdown)();
-    HIVE_API extern ProfileCtx (*PFN_profile_zone_begin)(const ProfileLocationData* data);
-    HIVE_API extern void (*PFN_profile_zone_end)(ProfileCtx ctx);
-    HIVE_API extern void (*PFN_profile_memory_alloc)(const void* ptr, const char* pool_name, uint32 size);
-    HIVE_API extern void (*PFN_profile_memory_free)(const void* ptr);
+    HIVE_API void profile_memory_free(const void* ptr, const char* pool_name);
 
     class HIVE_API ScopedProfileCtx
     {

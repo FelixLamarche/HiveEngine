@@ -52,32 +52,42 @@ void tracy_zone_end(hive::ProfileCtx ctx)
 
 void tracy_memory_alloc(const void* ptr, const char* pool_name, uint32 size)
 {
-    tracy::Profiler::MemAllocNamed(ptr, size, false, pool_name);
+    tracy::Profiler::MemAlloc(ptr, size, false);
 }
 
-void tracy_memory_free(const void* ptr)
+void tracy_memory_free(const void* ptr, const char* pool_name)
 {
     tracy::Profiler::MemFree(ptr, false);
 }
 
-
-extern "C" void InitModule()
+hive::ProfilerAPI tracy_api
 {
-    hive::PFN_profile_init = tracy_init;
-    hive::PFN_profile_shutdown = tracy_shutdown;
-    hive::PFN_profile_zone_begin = tracy_zone_begin;
-    hive::PFN_profile_zone_end = tracy_zone_end;
-    hive::PFN_profile_memory_alloc = tracy_memory_alloc;
-    hive::PFN_profile_memory_free = tracy_memory_free;
+    .PFN_profile_init = tracy_init,
+    .PFN_profile_shutdown = tracy_shutdown,
+    .PFN_profile_zone_begin = tracy_zone_begin,
+    .PFN_profile_zone_end = tracy_zone_end,
+    .PFN_profile_memory_alloc = tracy_memory_alloc,
+    .PFN_profile_memory_free = tracy_memory_free
+};
+
+extern "C" HIVE_API void InitModule()
+{
+    hive::profile_set_api(&tracy_api);
+    // hive::PFN_profile_init = tracy_init;
+    // hive::PFN_profile_shutdown = tracy_shutdown;
+    // hive::PFN_profile_zone_begin = tracy_zone_begin;
+    // hive::PFN_profile_zone_end = tracy_zone_end;
+    // hive::PFN_profile_memory_alloc = tracy_memory_alloc;
+    // hive::PFN_profile_memory_free = tracy_memory_free;
 }
 
-extern "C" void ShutdownModule()
+extern "C" HIVE_API void ShutdownModule()
 {
 
-    hive::PFN_profile_init = nullptr;
-    hive::PFN_profile_shutdown = nullptr;
-    hive::PFN_profile_zone_begin = nullptr;
-    hive::PFN_profile_zone_end = nullptr;
-    hive::PFN_profile_memory_alloc = nullptr;
-    hive::PFN_profile_memory_free = nullptr;
+    // hive::PFN_profile_init = nullptr;
+    // hive::PFN_profile_shutdown = nullptr;
+    // hive::PFN_profile_zone_begin = nullptr;
+    // hive::PFN_profile_zone_end = nullptr;
+    // hive::PFN_profile_memory_alloc = nullptr;
+    // hive::PFN_profile_memory_free = nullptr;
 }

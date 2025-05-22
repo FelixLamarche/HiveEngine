@@ -18,6 +18,7 @@ struct AllocationData
     AllocationData(size_t _size, AllocationCategory _category, const char* _file, int _line) : size(_size), category(_category), file(_file), line(_line) {}
 };
 
+// constexpr const char* heap_pool_name = "heap";
 void* hive_allocate(size_t size, AllocationCategory category, const char* file, int line)
 {
     const auto actual_ptr = static_cast<char*>(std::malloc(size + sizeof(AllocationData)));
@@ -36,7 +37,7 @@ void* hive_allocate(size_t size, AllocationCategory category, const char* file, 
     hive::g_hive.tracker.Track(actual_ptr);
 
 #ifdef HIVE_PROFILER_ENABLED
-    hive::profile_memory_alloc(actual_ptr, "heap", size + sizeof(AllocationData));
+    hive::profile_memory_alloc(actual_ptr, nullptr, size + sizeof(AllocationData));
 #endif
 
     return ptr;
@@ -52,7 +53,7 @@ void hive_free(void* ptr)
     std::free(actual_ptr);
 
 #ifdef HIVE_PROFILER_ENABLED
-    hive::profile_memory_free(actual_ptr);
+    hive::profile_memory_free(actual_ptr, nullptr);
 #endif
 
 }

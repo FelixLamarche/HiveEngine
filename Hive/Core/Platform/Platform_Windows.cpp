@@ -5,6 +5,7 @@
 
 void *hive::platform_load_library(const char *library_name)
 {
+
     const auto path = "./" + std::string(library_name) + ".dll";
     const auto lib = LoadLibrary(path.c_str());
 
