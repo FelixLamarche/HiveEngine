@@ -1,8 +1,3 @@
-namespace std
-{
-	class string;
-}
-
 namespace hive
 {
 	class Vector3
@@ -106,6 +101,11 @@ namespace hive
 				return acos(dot / lengths);
 			}
 			return 0.0f;
+		}
+
+		constexpr explicit operator std::string() const
+		{
+			return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")";
 		}
 	};
 

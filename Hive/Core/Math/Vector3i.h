@@ -90,6 +90,11 @@ namespace hive
 
 		float32 Length() const { return sqrt(LengthSq()); }
 		int64 LengthSq() const { return static_cast<int64>(x) * x + static_cast<int64>(y) * y + static_cast<int64>(z) * z; }
+
+		constexpr explicit operator std::string() const
+		{
+			return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")";
+		}
 	};
 
 	constexpr Vector3i operator*(int32 scalar, const Vector3i& vector) { return vector * scalar; }

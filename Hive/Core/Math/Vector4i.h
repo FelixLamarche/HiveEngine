@@ -101,6 +101,11 @@ namespace hive
 				static_cast<int64>(z) * z +
 				static_cast<int64>(w) * w;
 		}
+
+		constexpr explicit operator std::string() const
+		{
+			return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w) + ")";
+		}
 	};
 
 	constexpr Vector4i operator*(int32 scalar, const Vector4i& vector) { return vector * scalar; }

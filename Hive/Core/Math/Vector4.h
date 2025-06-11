@@ -88,6 +88,11 @@ namespace hive
 		}
 		void Normalize() { *this = Normalized(); }
 		float32 Dot(const Vector4& other) const { return x * other.x + y * other.y + z * other.z + w * other.w; }
+
+		constexpr explicit operator std::string() const
+		{
+			return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w) + ")";
+		}
 	};
 
 	constexpr Vector4 operator*(float32 scalar, const Vector4& vector) { return vector * scalar; }

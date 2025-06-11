@@ -93,6 +93,11 @@ namespace hive
 			}
 			return 0.0f;
 		}
+
+		constexpr explicit operator std::string() const
+		{
+			return "(" + std::to_string(x) + ", " + std::to_string(y) + ")";
+		}
 	};
 
 	constexpr Vector2 operator*(float32 scalar, const Vector2& vector) { return vector * scalar; }
