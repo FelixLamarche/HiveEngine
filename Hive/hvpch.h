@@ -48,3 +48,16 @@ using float64 = double;
 #include "Core/Memory/MemoryAllocator.h"
 #include "Core/Debug.h"
 
+#include "Core/Math/Vector2.h"
+#include "Core/Math/Vector2i.h"
+#include "Core/Math/Vector3.h"
+#include "Core/Math/Vector3i.h"
+#include "Core/Math/Vector4.h"
+#include "Core/Math/Vector4i.h"
+
+using Vector2 = hive::Vector2;
+using Vector2i = hive::Vector2i;
+using Vector3 = hive::Vector3;
+using Vector3i = hive::Vector3i;
+using Vector4 = hive::Vector4;
+using Vector4i = hive::Vector4i;
